@@ -25,16 +25,23 @@ export default {
       this.$router.push(`/edit/${id}`);
     },
     goToAddPage() {
-        this.$router.push('/add')
+      this.$router.push("/add");
     },
-    deletePatient: async function(id) {
-        try {
-            await this.axiosDeletePatient(id)
-            this.getPatients()
-        } catch (error) {
-            
-        }
-    }
+    deletePatient: async function (id) {
+      try {
+        const response = await this.axiosDeletePatient(id);
+        this.$swal({
+          icon: "success",
+          text: response.data.status.message,
+        });
+        this.getPatients();
+      } catch (error) {
+        this.$swal({
+          icon: "error",
+          text: error.response.data.status.message,
+        });
+      }
+    },
   },
   created() {
     this.getPatients();
@@ -43,25 +50,47 @@ export default {
 </script>
 
 <template>
-  <button type="button" class="btn btn-info my-auto w-25" @click.prevent="goToAddPage()">Add Patient</button>
+  <button
+    type="button"
+    class="btn btn-info my-auto w-25"
+    @click.prevent="goToAddPage()"
+  >
+    Add Patient
+  </button>
   <div class="row justify-content-center">
     <div class="col-auto">
       <table class="table table-bordered">
         <thead>
-          <td>No</td>
           <td>Name</td>
           <td>NIK</td>
           <td>Actions</td>
         </thead>
         <tbody>
           <tr v-for="patient in patients">
-            <td>{{ patient.id }}</td>
             <td>{{ patient.name }}</td>
             <td>{{ patient.nik }}</td>
             <td>
-              <button type="button" class="btn btn-primary mx-1" @click.prevent="seeDetail(patient.id)">Detail</button>
-              <button type="button" class="btn btn-secondary mx-1" @click.prevent="editPatient(patient.id)">Edit</button>
-              <button type="button" class="btn btn-danger mx-1" @click.prevent="deletePatient(patient.id)">Delete</button>
+              <button
+                type="button"
+                class="btn btn-primary mx-1"
+                @click.prevent="seeDetail(patient.id)"
+              >
+                Detail
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary mx-1"
+                @click.prevent="editPatient(patient.id)"
+              >
+                Edit
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger mx-1"
+                @click.prevent="deletePatient(patient.id)"
+              >
+                Delete
+              </button>
             </td>
           </tr>
         </tbody>

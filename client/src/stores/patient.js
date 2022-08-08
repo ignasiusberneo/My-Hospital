@@ -5,15 +5,9 @@ export const usePatientStore = defineStore({
   id: 'patient',
   state: () => ({
     counter: 0,
-    baseUrl: "http://localhost:3000"
+    baseUrl: "https://neo-hospital.herokuapp.com"
   }),
-  getters: {
-    doubleCount: (state) => state.counter * 2
-  },
   actions: {
-    increment() {
-      this.counter++
-    },
     axiosGetPatients() {
       return axios.get(
         `${this.baseUrl}/patients`

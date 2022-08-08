@@ -11,7 +11,7 @@ export default {
         religion: "",
         phone: "",
         address: "",
-        nik: ""
+        nik: "",
       },
     };
   },
@@ -23,17 +23,27 @@ export default {
         this.editPatientData = response.data.result.data;
       } catch (err) {}
     },
-    editPatient: async function() {
-          try {
-            await this.axiosEditPatient(this.editPatientData.id, this.editPatientData)
-            this.$router.push('/')
-          } catch (error) {
-            
-          }
-        },
-        cancel() {
-          this.$router.push('/')
-        }
+    editPatient: async function () {
+      try {
+        const response = await this.axiosEditPatient(
+          this.editPatientData.id,
+          this.editPatientData
+        );
+        this.$swal({
+          icon: "success",
+          text: response.data.status.message,
+        });
+        this.$router.push("/");
+      } catch (error) {
+        this.$swal({
+          icon: "error",
+          text: error.response.data.status.message,
+        });
+      }
+    },
+    cancel() {
+      this.$router.push("/");
+    },
   },
   created() {
     this.getPatientById(this.$route.params.id);
@@ -45,22 +55,26 @@ export default {
   <form>
     <div class="form-group">
       <label>Name</label>
-      <input v-model="editPatientData.name" class="form-control"/>
+      <input v-model="editPatientData.name" class="form-control" />
     </div>
     <div class="form-group">
-    <label>Sex</label>
-    <select v-model="editPatientData.sex" class="form-control" id="exampleFormControlSelect1">
-      <option value="Male">Male</option>
-      <option value="Female">Female</option>
-    </select>
-  </div>
+      <label>Sex</label>
+      <select
+        v-model="editPatientData.sex"
+        class="form-control"
+        id="exampleFormControlSelect1"
+      >
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+      </select>
+    </div>
     <div class="form-group">
       <label>Religion</label>
       <input v-model="editPatientData.religion" class="form-control" />
     </div>
     <div class="form-group">
       <label>Phone</label>
-      <input v-model="editPatientData.phone" class="form-control"/>
+      <input v-model="editPatientData.phone" class="form-control" />
     </div>
     <div class="form-group">
       <label>Address</label>
@@ -72,10 +86,22 @@ export default {
     </div>
     <div class="form-group">
       <label>NIK</label>
-      <input v-model="editPatientData.nik" class="form-control"/>
+      <input v-model="editPatientData.nik" class="form-control" />
     </div>
-    <button type="submit" class="btn btn-primary mx-1" @click.prevent="editPatient()">Edit</button>
-  <button type="submit" class="btn btn-secondary mx-1" @click.prevent="cancel()">Cancel</button>
+    <button
+      type="submit"
+      class="btn btn-primary mx-1"
+      @click.prevent="editPatient()"
+    >
+      Edit
+    </button>
+    <button
+      type="submit"
+      class="btn btn-secondary mx-1"
+      @click.prevent="cancel()"
+    >
+      Cancel
+    </button>
   </form>
 </template>
 
